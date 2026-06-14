@@ -57,17 +57,17 @@ export default function App() {
               <button
                 key={id}
                 onClick={() => setTab(id)}
-                className={`flex-shrink-0 flex flex-col items-center gap-0.5 px-3 py-2.5 text-xs font-semibold transition-colors relative ${
+                className={`flex-1 min-w-[64px] flex flex-col items-center gap-1 px-2 py-3 text-xs font-bold transition-colors relative ${
                   tab === id ? 'text-indigo-600' : 'text-gray-400'
                 }`}
               >
-                <Icon size={20} />
-                <span className="whitespace-nowrap">{label}</span>
+                <Icon size={26} />
+                <span className="whitespace-nowrap text-[11px]">{label}</span>
                 {tab === id && (
-                  <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-indigo-600 rounded-full" />
+                  <span className="absolute bottom-0 left-3 right-3 h-[3px] bg-indigo-600 rounded-full" />
                 )}
                 {id === 'shopping' && shoppingList.length > 0 && (
-                  <span className="absolute top-1.5 right-1 w-4 h-4 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center font-bold">
+                  <span className="absolute top-2 right-2 w-5 h-5 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center font-bold">
                     {shoppingList.length > 9 ? '9+' : shoppingList.length}
                   </span>
                 )}

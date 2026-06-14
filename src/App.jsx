@@ -4,12 +4,14 @@ import Overview from './components/Overview'
 import StockChecker from './components/StockChecker'
 import ShoppingList from './components/ShoppingList'
 import AllItems from './components/AllItems'
-import { LayoutDashboard, ClipboardCheck, ShoppingCart, List } from 'lucide-react'
+import Categories from './components/Categories'
+import { LayoutDashboard, ClipboardCheck, ShoppingCart, List, BarChart3 } from 'lucide-react'
 
 const TABS = [
-  { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-  { id: 'check', label: 'Check Stock', icon: ClipboardCheck },
+  { id: 'overview', label: 'Home', icon: LayoutDashboard },
+  { id: 'check', label: 'Check', icon: ClipboardCheck },
   { id: 'shopping', label: 'Shopping', icon: ShoppingCart },
+  { id: 'categories', label: 'Categories', icon: BarChart3 },
   { id: 'all', label: 'All Items', icon: List },
 ]
 
@@ -31,8 +33,8 @@ export default function App() {
     <div className="min-h-screen bg-gray-50 flex flex-col max-w-2xl mx-auto">
       {/* Header */}
       <header className="bg-white border-b border-gray-100 shadow-sm sticky top-0 z-10">
-        <div className="px-4 pt-4 pb-2">
-          <div className="flex items-center gap-3">
+        <div className="px-4 pt-3 pb-0">
+          <div className="flex items-center gap-3 pb-2">
             <span className="text-2xl">🍲</span>
             <div>
               <h1 className="text-lg font-bold text-gray-800 leading-none">My Kitchen</h1>
@@ -41,44 +43,42 @@ export default function App() {
             {shoppingList.length > 0 && (
               <button
                 onClick={() => setTab('shopping')}
-                className="ml-auto flex items-center gap-1.5 bg-red-50 border border-red-200 text-red-600 text-xs font-medium px-3 py-1.5 rounded-xl"
+                className="ml-auto flex items-center gap-1.5 bg-red-50 border border-red-200 text-red-600 text-sm font-semibold px-3 py-2 rounded-xl"
               >
-                <ShoppingCart size={13} />
+                <ShoppingCart size={15} />
                 {shoppingList.length} to buy
               </button>
             )}
           </div>
-        </div>
 
-        {/* Tabs */}
-        <div className="flex border-t border-gray-100">
-          {TABS.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              onClick={() => setTab(id)}
-              className={`flex-1 flex flex-col items-center gap-0.5 py-2 text-xs font-medium transition-colors relative ${
-                tab === id
-                  ? 'text-indigo-600'
-                  : 'text-gray-400 hover:text-gray-600'
-              }`}
-            >
-              <Icon size={16} />
-              <span>{label}</span>
-              {tab === id && (
-                <span className="absolute bottom-0 left-1/4 right-1/4 h-0.5 bg-indigo-600 rounded-full" />
-              )}
-              {id === 'shopping' && shoppingList.length > 0 && (
-                <span className="absolute top-1 right-2 w-4 h-4 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center">
-                  {shoppingList.length > 9 ? '9+' : shoppingList.length}
-                </span>
-              )}
-            </button>
-          ))}
+          {/* Tabs — scrollable on small screens */}
+          <div className="flex border-t border-gray-100 overflow-x-auto">
+            {TABS.map(({ id, label, icon: Icon }) => (
+              <button
+                key={id}
+                onClick={() => setTab(id)}
+                className={`flex-shrink-0 flex flex-col items-center gap-0.5 px-3 py-2.5 text-xs font-semibold transition-colors relative ${
+                  tab === id ? 'text-indigo-600' : 'text-gray-400'
+                }`}
+              >
+                <Icon size={20} />
+                <span className="whitespace-nowrap">{label}</span>
+                {tab === id && (
+                  <span className="absolute bottom-0 left-2 right-2 h-0.5 bg-indigo-600 rounded-full" />
+                )}
+                {id === 'shopping' && shoppingList.length > 0 && (
+                  <span className="absolute top-1.5 right-1 w-4 h-4 bg-red-500 text-white text-[10px] rounded-full flex items-center justify-center font-bold">
+                    {shoppingList.length > 9 ? '9+' : shoppingList.length}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
         </div>
       </header>
 
       {/* Content */}
-      <main className="flex-1 overflow-y-auto pb-6">
+      <main className="flex-1 overflow-y-auto pb-8">
         {tab === 'overview' && (
           <Overview items={items} stats={stats} onNavigateToCheck={setTab} />
         )}
@@ -87,6 +87,9 @@ export default function App() {
         )}
         {tab === 'shopping' && (
           <ShoppingList shoppingList={shoppingList} updateStatus={updateStatus} />
+        )}
+        {tab === 'categories' && (
+          <Categories items={items} />
         )}
         {tab === 'all' && (
           <AllItems items={items} updateStatus={updateStatus} addItem={addItem} deleteItem={deleteItem} />
